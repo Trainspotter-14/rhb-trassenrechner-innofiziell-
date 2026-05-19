@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RhB Infra Simulator</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#0d1015;
+    color:white;
+    overflow-x:hidden;
+}
+
+nav{
+    position:fixed;
+    width:100%;
+    top:0;
+    left:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 60px;
+    z-index:1000;
+    background:rgba(10,10,10,0.55);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+}
+
+.logo{
+    font-size:28px;
+    font-weight:800;
+    color:#ff3b3b;
+}
+
+nav ul{
+    display:flex;
+    gap:35px;
+    list-style:none;
+}
+
+nav a{
+    text-decoration:none;
+    color:white;
+    font-weight:500;
+    transition:0.2s;
+}
+
+nav a:hover{
+    color:#ff4747;
+}
+
+.hero{
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px;
+    background:
+    linear-gradient(rgba(0,0,0,0.62),rgba(0,0,0,0.8)),
+    url("hero.jpg");
+    background-size:cover;
+    background-position:center;
+}
+
+.hero-content{
+    max-width:1000px;
+}
+
+.hero h1{
+    font-size:82px;
+    line-height:0.95;
+    margin-bottom:30px;
+}
+
+.hero h1 span{
+    color:#ff4040;
+}
+
+.hero p{
+    font-size:22px;
+    color:#d0d0d0;
+    line-height:1.7;
+    margin-bottom:40px;
+}
+
+.hero-buttons{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.hero button{
+    padding:18px 34px;
+    border:none;
+    border-radius:16px;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.primary{
+    background:#e30000;
+    color:white;
+}
+
+.primary:hover{
+    transform:translateY(-4px);
+    background:#ff2d2d;
+}
+
+.secondary{
+    background:rgba(255,255,255,0.08);
+    color:white;
+    backdrop-filter:blur(10px);
+}
+
+.secondary:hover{
+    background:rgba(255,255,255,0.15);
+}
+
+.section{
+    max-width:1350px;
+    margin:auto;
+    padding:120px 35px;
+}
+
+.section-title{
+    font-size:48px;
+    margin-bottom:60px;
+    color:#ff4747;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:28px;
+}
+
+.card{
+    background:linear-gradient(145deg,#191d24,#12151b);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:28px;
+    padding:35px;
+    transition:0.25s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    border-color:rgba(255,70,70,0.3);
+}
+
+.card h3{
+    margin-bottom:18px;
+    font-size:24px;
+    color:#ff4b4b;
+}
+
+.card p{
+    color:#c8c8c8;
+    line-height:1.8;
+}
+
+.calculator{
+    background:linear-gradient(145deg,#171b22,#0f1318);
+    border-radius:32px;
+    padding:45px;
+    border:1px solid rgba(255,255,255,0.06);
+}
+
+.calc-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    margin-top:18px;
+    font-weight:600;
+}
+
+input,select{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:14px;
+    background:#242933;
+    color:white;
+    font-size:16px;
+}
+
+.calc-button{
+    width:100%;
+    margin-top:40px;
+    padding:18px;
+    border:none;
+    border-radius:16px;
+    background:#df0000;
+    color:white;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.calc-button:hover{
+    background:#ff2e2e;
+}
+
+.results{
+    margin-top:45px;
+    background:#101318;
+    border-radius:22px;
+    padding:35px;
+    line-height:2.2;
+    font-size:18px;
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.highlight{
+    color:#00ff99;
+    font-weight:700;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.stat{
+    background:#181c24;
+    border-radius:24px;
+    padding:35px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.stat h2{
+    color:#ff4343;
+    font-size:48px;
+    margin-bottom:10px;
+}
+
+footer{
+    background:#090b0f;
+    padding:70px 35px;
+    border-top:1px solid rgba(255,255,255,0.05);
+}
+
+.footer-grid{
+    max-width:1300px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:50px;
+}
+
+footer h3{
+    margin-bottom:18px;
+    color:#ff4b4b;
+}
+
+footer p{
+    color:#bdbdbd;
+    line-height:1.9;
+}
+
+.footer-bottom{
+    text-align:center;
+    margin-top:60px;
+    color:#666;
+}
+
+@media(max-width:900px){
+
+    nav{
+        padding:20px;
+    }
+
+    nav ul{
+        display:none;
+    }
+
+    .hero h1{
+        font-size:52px;
+    }
+
+    .hero p{
+        font-size:18px;
+    }
+
+    .calc-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+
+    <div class="logo">
+        RhB Infra
+    </div>
+
+    <ul>
+        <li><a href="#about">Über</a></li>
+        <li><a href="#calculator">Rechner</a></li>
+        <li><a href="#stats">Netz</a></li>
+        <li><a href="#footer">Info</a></li>
+    </ul>
+
+</nav>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            RhB <span>Infrastruktur</span><br>
+            Simulator
+        </h1>
+
+        <p>
+            Berechne realistische Trassenkosten,
+            plane virtuelle Zugläufe und simuliere
+            deinen eigenen Bahnbetrieb.
+        </p>
+
+        <div class="hero-buttons">
+
+            <button class="primary"
+            onclick="document.getElementById('calculator').scrollIntoView()">
+
+                Rechner starten
+
+            </button>
+
+            <button class="secondary"
+            onclick="document.getElementById('about').scrollIntoView()">
+
+                Mehr erfahren
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section" id="about">
+
+    <h2 class="section-title">
+        Über die Plattform
+    </h2>
+
+    <div class="grid">
+
+        <div class="card">
+
+            <h3>
+                Realistische Simulation
+            </h3>
+
+            <p>
+                Die Berechnung basiert auf echten
+                Infrastrukturwerten der Rhätischen Bahn
+                und simuliert realistische Betriebskosten.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Für Train Sim World
+            </h3>
+
+            <p>
+                Perfekt für Rollenspiele,
+                virtuelle EVUs,
+                Fahrplansimulationen
+                oder Multiplayer-Projekte.
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>
+                Dynamische Kosten
+            </h3>
+
+            <p>
+                Gewicht, Streckenlänge,
+                Zwischenhalte und Energieverbrauch
+                beeinflussen die Berechnung.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section" id="calculator">
+
+    <h2 class="section-title">
+        Trassenkostenrechner
+    </h2>
+
+    <div class="calculator">
+
+        <div class="calc-grid">
+
+            <div>
+
+                <label>Fahrzeug</label>
+
+                <select id="vehicle">
+
+                    <option value="80">
+                        Ge 4/4 II
+                    </option>
+
+                    <option value="105">
+                        Allegra ABe 8/12
+                    </option>
+
+                </select>
+
+                <label>Gesamtgewicht des Zuges (t)</label>
+
+                <input
+                type="number"
+                id="weight"
+                value="220">
+
+                <label>Streckenlänge (km)</label>
+
+                <input
+                type="number"
+                id="distance"
+                value="100">
+
+            </div>
+
+            <div>
+
+                <label>Anzahl Fahrten</label>
+
+                <input
+                type="number"
+                id="trips"
+                value="1">
+
+                <label>Zwischenhalte</label>
+
+                <input
+                type="number"
+                id="stops"
+                value="0">
+
+                <label>Betriebsart</label>
+
+                <select id="type">
+
+                    <option value="1.15">
+                        Personenzug
+                    </option>
+
+                    <option value="0.81">
+                        Leerfahrt
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <button class="calc-button"
+        onclick="calculate()">
+
+            Infrastrukturkosten berechnen
+
+        </button>
+
+        <div class="results">
+
+            Trassenkosten:
+            <span class="highlight" id="track">
+                0 CHF
+            </span>
+
+            <br>
+
+            Gewichtskosten:
+            <span class="highlight" id="weightCost">
+                0 CHF
+            </span>
+
+            <br>
+
+            Energiekosten:
+            <span class="highlight" id="energy">
+                0 CHF
+            </span>
+
+            <br>
+
+            Haltzuschlag:
+            <span class="highlight" id="stopCost">
+                0 CHF
+            </span>
+
+            <br>
+
+            Gesamt pro Fahrt:
+            <span class="highlight" id="total">
+                0 CHF
+            </span>
+
+            <br>
+
+            Gesamt für alle Fahrten:
+            <span class="highlight" id="all">
+                0 CHF
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="section" id="stats">
+
+    <h2 class="section-title">
+        Netzstatistik
+    </h2>
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <h2>384</h2>
+
+            <p>
+                Kilometer Streckennetz
+            </p>
+
+        </div>
+
+        <div class="stat">
+
+            <h2>1000</h2>
+
+            <p>
+                Millimeter Spurweite
+            </p>
+
+        </div>
+
+        <div class="stat">
+
+            <h2>70‰</h2>
+
+            <p>
+                Maximale Steigung
+            </p>
+
+        </div>
+
+        <div class="stat">
+
+            <h2>16⅔Hz</h2>
+
+            <p>
+                Stromsystem
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<footer id="footer">
+
+    <div class="footer-grid">
+
+        <div>
+
+            <h3>
+                RhB Infra Simulator
+            </h3>
+
+            <p>
+                Virtuelle Infrastruktur-
+                und EVU-Simulation
+                für moderne Bahnprojekte.
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>
+                Technologien
+            </h3>
+
+            <p>
+                HTML, CSS und JavaScript.
+                Optimiert für GitHub Pages
+                und mobile Geräte.
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>
+                Hinweis
+            </h3>
+
+            <p>
+                Diese Webseite ist ein
+                Fanprojekt und steht in keiner
+                Verbindung zur Rhätischen Bahn.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 RhB Infra Simulator
+
+    </div>
+
+</footer>
+
+<script>
+
+function calculate(){
+
+    let weight =
+    parseFloat(document.getElementById("weight").value);
+
+    let distance =
+    parseFloat(document.getElementById("distance").value);
+
+    let trips =
+    parseFloat(document.getElementById("trips").value);
+
+    let stops =
+    parseFloat(document.getElementById("stops").value);
+
+    let type =
+    parseFloat(document.getElementById("type").value);
+
+    let track =
+    distance * type;
+
+    let weightCost =
+    weight * distance * 0.0033;
+
+    let energy =
+    weight * distance * 0.0066;
+
+    let stopCost =
+    energy * (stops * 0.04);
+
+    let total =
+    track +
+    weightCost +
+    energy +
+    stopCost;
+
+    let all =
+    total * trips;
+
+    document.getElementById("track").innerText =
+    track.toFixed(2) + " CHF";
+
+    document.getElementById("weightCost").innerText =
+    weightCost.toFixed(2) + " CHF";
+
+    document.getElementById("energy").innerText =
+    energy.toFixed(2) + " CHF";
+
+    document.getElementById("stopCost").innerText =
+    stopCost.toFixed(2) + " CHF";
+
+    document.getElementById("total").innerText =
+    total.toFixed(2) + " CHF";
+
+    document.getElementById("all").innerText =
+    all.toFixed(2) + " CHF";
+
+}
+
+</script>
+
+</body>
+</html>
