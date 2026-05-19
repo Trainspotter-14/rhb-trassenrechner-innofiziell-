@@ -729,6 +729,94 @@ function calculate(){
 
 }
 
+const euroRate = 0.94;
+
+const heroImages = [
+    "hero1.jpg",
+    "hero2.jpg",
+    "hero3.jpg",
+    "hero4.jpg"
+];
+
+let currentHero = 0;
+
+function changeHero(){
+
+    currentHero++;
+
+    if(currentHero >= heroImages.length){
+        currentHero = 0;
+    }
+
+    document.querySelector('.hero').style.background =
+    `linear-gradient(rgba(0,0,0,0.62),rgba(0,0,0,0.8)), url('${heroImages[currentHero]}') center/cover`;
+
+}
+
+setInterval(changeHero, 7000);
+
+function calculate(){
+
+    let weight =
+    parseFloat(document.getElementById("weight").value);
+
+    let distance =
+    parseFloat(document.getElementById("distance").value);
+
+    let trips =
+    parseFloat(document.getElementById("trips").value);
+
+    let stops =
+    parseFloat(document.getElementById("stops").value);
+
+    let type =
+    parseFloat(document.getElementById("type").value);
+
+    let track =
+    distance * type;
+
+    let weightCost =
+    weight * distance * 0.0033;
+
+    let energy =
+    weight * distance * 0.0066;
+
+    let stopCost =
+    energy * (stops * 0.04);
+
+    let total =
+    track +
+    weightCost +
+    energy +
+    stopCost;
+
+    let all =
+    total * trips;
+
+    let totalEuro = total * euroRate;
+
+    let allEuro = all * euroRate;
+
+    document.getElementById("track").innerText =
+    track.toFixed(2) + " CHF";
+
+    document.getElementById("weightCost").innerText =
+    weightCost.toFixed(2) + " CHF";
+
+    document.getElementById("energy").innerText =
+    energy.toFixed(2) + " CHF";
+
+    document.getElementById("stopCost").innerText =
+    stopCost.toFixed(2) + " CHF";
+
+    document.getElementById("total").innerText =
+    total.toFixed(2) + " CHF / " + totalEuro.toFixed(2) + " €";
+
+    document.getElementById("all").innerText =
+    all.toFixed(2) + " CHF / " + allEuro.toFixed(2) + " €";
+
+}
+
 </script>
 
 </body>
